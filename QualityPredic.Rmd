@@ -1,0 +1,28 @@
+---
+title: "Quality of Weight Lifting Exercises Recognition"
+author: "Alexandre Rodichevski"
+date: "18 febbraio 2015"
+output: html_document
+---
+
+Download and look at the dataset.
+
+```{r libraries}
+library(caret)
+```
+
+```{r read-dataset, cache=TRUE}
+url <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+fn <- "pml-training.csv"
+download.file(url, fn, "curl")
+pml <- read.csv(fn)
+```
+
+```{r summary, cache=TRUE}
+str(pml)
+summary(pml)
+```
+
+```{r fitting, cache=TRUE}
+#modFit <- train(pml)
+```
