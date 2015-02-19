@@ -1,15 +1,21 @@
 ---
 title: "Quality of Weight Lifting Exercises Recognition"
 author: "Alexandre Rodichevski"
-date: "18 febbraio 2015"
+date: "2015-01-18"
 output: html_document
 ---
 
-Download and look at the dataset.
+##Abstract
 
-```{r libraries}
+This report is an excercise variation of the [research work](http://groupware.les.inf.puc-rio.br/har). We build a machine learning algorithm to predict activity quality from activity monitors.
+
+```{r libraries, echo=FALSE, results='hide'}
 library(caret)
 ```
+
+##Dataset
+
+We download the training dataset.
 
 ```{r read-dataset, cache=TRUE}
 url <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
@@ -18,11 +24,27 @@ download.file(url, fn, "curl")
 pml <- read.csv(fn)
 ```
 
-```{r summary, cache=TRUE}
-str(pml)
-summary(pml)
+We select the only useful columns: **classe** (the activity quality) and ones whose name begins with **roll**, **pitch**, **yaw**, **total**, **gyros**, **accel** and **magnet** (the accelerometer data). We have not considered the columns containing mostly not avaiable values.
+
+```{r subset, cache=TRUE}
+pml1 <- pml[grepl("^classe|^roll|^pitch|^yaw|^total|^gyros|^accel|^magnet", names(pml))]
 ```
 
+##Machine Learning Algorithm
+
+We have used random forest algorythm proposed in the original research.
+
 ```{r fitting, cache=TRUE}
-#modFit <- train(pml)
+modFit <- train(classe ~ ., method = "rf", data = pml1)
 ```
+
+The accuracy is about 99%. The out-of-bag error is about 0.5%.
+
+```{r fitting-view, cache=FALSE}
+modFit
+model <- modFit$finalModel
+summary(model$err.rate[, "OOB"])
+```
+
+The simple decision tree algorytm, on the contrary, gives about 50% of accuracy.
+
