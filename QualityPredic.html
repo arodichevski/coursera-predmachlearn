@@ -83,7 +83,10 @@ pml &lt;- read.csv(fn)</code></pre>
 <pre><code>## Loading required package: randomForest
 ## randomForest 4.6-10
 ## Type rfNews() to see new features/changes/bug fixes.</code></pre>
-<p>The accuracy is about 99%. The out-of-bag error is about 0.5%.</p>
+</div>
+<div id="out-of-sample-error" class="section level2">
+<h2>Out-of-sample Error</h2>
+<p>The accuracy is about 99%. The out-of-bag error of the random forest algorythm is about 0.5%. The out-of-sample error is expected to have similar value, about 0.5%.</p>
 <pre class="r"><code>modFit</code></pre>
 <pre><code>## Random Forest 
 ## 
@@ -106,10 +109,12 @@ pml &lt;- read.csv(fn)</code></pre>
 ## Accuracy was used to select the optimal model using  the largest value.
 ## The final value used for the model was mtry = 27.</code></pre>
 <pre class="r"><code>model &lt;- modFit$finalModel
-summary(model$err.rate[, &quot;OOB&quot;])</code></pre>
-<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-## 0.004281 0.004434 0.004536 0.005749 0.004752 0.054420</code></pre>
-<p>The simple decision tree algorytm, on the contrary, gives about 50% of accuracy.</p>
+median(model$err.rate[, &quot;OOB&quot;])</code></pre>
+<pre><code>## [1] 0.004535725</code></pre>
+<p>The simple decision tree algorytm is much less accurate, giving about 50% of accuracy.</p>
+<pre><code>## Loading required package: randomForest
+## randomForest 4.6-10
+## Type rfNews() to see new features/changes/bug fixes.</code></pre>
 </div>
 
 

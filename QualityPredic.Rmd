@@ -38,13 +38,35 @@ We have used random forest algorythm proposed in the original research.
 modFit <- train(classe ~ ., method = "rf", data = pml1)
 ```
 
-The accuracy is about 99%. The out-of-bag error is about 0.5%.
+##Out-of-sample Error
 
-```{r fitting-view, cache=FALSE}
+The accuracy is about 99%. The out-of-bag error of the random forest algorythm is about 0.5%. The out-of-sample error is expected to have similar value, about 0.5%.
+
+```{r fitting-view, cache=TRUE}
 modFit
 model <- modFit$finalModel
-summary(model$err.rate[, "OOB"])
+median(model$err.rate[, "OOB"])
 ```
 
-The simple decision tree algorytm, on the contrary, gives about 50% of accuracy.
+The simple decision tree algorytm is much less accurate, giving about 50% of accuracy.
+
+```{r read-test, cache=TRUE, echo=FALSE, results='hide'}
+url2 <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+fn2 <- "pml-testing.csv"
+download.file(url2, fn2, "curl")
+test <- read.csv(fn2)
+test1 <- test[grepl("^classe|^roll|^pitch|^yaw|^total|^gyros|^accel|^magnet", names(test))]
+```
+
+```{r predict, cache=TRUE, echo=FALSE, results='hide'}
+answers = predict(modFit, test1)
+pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+pml_write_files(answers)
+```
 
